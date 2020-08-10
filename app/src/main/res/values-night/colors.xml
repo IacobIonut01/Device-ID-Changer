@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">@color/iconic_blue</color>
+
+    <!-- Color Palette-->
+    <color name="iconic_blue">#039BE5</color>
+    <color name="some_green">#c100b68c</color>
+    <color name="deep_orange">#c1FF5722</color>
+    <color name="semiBlack">#7f939393</color>
+    <color name="scrim">#22000000</color>
+    <color name="colorOrange">#ff5722</color>
+    <color name="colorGreen">#00b68c</color>
+    <color name="colorGreen83">#2C00B68C</color>
+
+    <color name="dt_tab_color">?android:colorAccent</color>
+    <color name="dt_tab_text_color">@color/dt_tab_color</color>
+    <color name="dt_tab_inactive_text_color">?android:colorAccent</color>
+    <color name="dt_tab_background_color">@android:color/transparent</color>
+    <color name="card_background">#fffafafa</color>
+</resources>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageView12"
+        android:layout_width="32dp"
+        android:layout_height="8dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        app:srcCompat="@drawable/sheet_pin"
+        app:tint="@color/semiBlack" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/appIcon_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="18dp"
+            app:cardCornerRadius="24dp">
+
+            <ImageView
+                android:id="@+id/s_appIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:srcCompat="@drawable/ic_launcher_background" />
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/s_appname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/google_sans_bold"
+                android:singleLine="true"
+                android:text="Application Name"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/s_packagename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/google_sans"
+                android:text="com.package.name"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/randomizeIDs"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="center"
+            android:src="@drawable/ic_randomize" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/apply_changes"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="18dp"
+            android:backgroundTint="@color/colorAccent"
+            android:fontFamily="@font/google_sans_bold"
+            android:text="Apply"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="?android:attr/textColorPrimary"
+            app:cornerRadius="24dp" />
+
+    </LinearLayout>
+
+    <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="18dp"
+        app:labelText="Current ID"
+        app:primaryColor="@color/colorAccent"
+        app:secondaryColor="@color/colorAccent">
+
+        <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+            android:id="@+id/currentID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:fontFamily="@font/google_sans"
+            android:singleLine="true" />
+
+    </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+    <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="18dp"
+        app:labelText="Default ID"
+        app:primaryColor="@color/colorAccent"
+        app:secondaryColor="@color/colorAccent">
+
+        <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+            android:id="@+id/defaultID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:fontFamily="@font/google_sans"
+            android:singleLine="true" />
+
+    </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+</LinearLayout>
