@@ -60,6 +60,22 @@ public class AppPreferences {
         return list;
     }
 
+    public void removeModifiedID(String packagename) {
+        SharedPreferences.Editor editor = prefs.edit();
+        ArrayList<String> list = null;
+        String result = prefs.getString("modifiedIDs", "");
+        if (result != null && !result.equals("")) try {
+            list = (ArrayList<String>) ObjectSerializer.deserialize(result);
+            String formatted = String.format("packagename: %s", packagename);
+            list.removeIf(s -> s.equals(formatted));
+            editor.putString("modifiedIDs", ObjectSerializer.serialize(list));
+            editor.apply();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void clearModifiedIDsFromStorage() {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("modifiedIDs", "");

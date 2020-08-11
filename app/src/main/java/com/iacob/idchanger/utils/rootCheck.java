@@ -1,4 +1,4 @@
-package com.iacob.idchanger.id_parser;
+package com.iacob.idchanger.utils;
 
 import android.util.Log;
 
@@ -7,7 +7,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public abstract class rootCheck {
@@ -50,34 +49,6 @@ public abstract class rootCheck {
             Log.d("ROOT", "Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
         }
 
-        return retval;
-    }
-
-    public final boolean execute() {
-        boolean retval = false;
-        try {
-            ArrayList<String> commands = getCommandsToExecute();
-            if (null != commands && commands.size() > 0) {
-                Process suProcess = Runtime.getRuntime().exec("su");
-                DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
-                for (String currCommand : commands) {
-                    os.writeBytes(currCommand + "\n");
-                    os.flush();
-                }
-                os.writeBytes("exit\n");
-                os.flush();
-                try {
-                    int suProcessRetval = suProcess.waitFor();
-                    retval = 255 != suProcessRetval;
-                } catch (Exception ex) {
-                    Log.e("ROOT", "Error executing root action", ex);
-                }
-            }
-        } catch (IOException | SecurityException ex) {
-            Log.w("ROOT", "Can't get root access", ex);
-        } catch (Exception ex) {
-            Log.w("ROOT", "Error executing internal operation", ex);
-        }
         return retval;
     }
 
@@ -127,6 +98,4 @@ public abstract class rootCheck {
         }
         return "";
     }
-
-    protected abstract ArrayList<String> getCommandsToExecute();
 }

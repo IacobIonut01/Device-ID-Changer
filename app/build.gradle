@@ -9,7 +9,7 @@ android {
         minSdkVersion 28
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "1.0-Alpha"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,6 +38,7 @@ dependencies {
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.HITGIF:TextFieldBoxes:1.4.5'
+    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

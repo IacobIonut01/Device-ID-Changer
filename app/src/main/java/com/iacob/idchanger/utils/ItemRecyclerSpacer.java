@@ -1,4 +1,4 @@
-package com.iacob.idchanger;
+package com.iacob.idchanger.utils;
 
 import android.graphics.Rect;
 import android.view.View;

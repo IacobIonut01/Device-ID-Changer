@@ -28,17 +28,60 @@
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        app:fabAlignmentMode="center"/>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/action_fab"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:text="Nothing to Apply"
-        app:backgroundTint="@color/colorAccent"
-        app:icon="@drawable/ic_add"
         app:layout_anchor="@+id/bottomAppBar"
-        app:srcCompat="@drawable/ic_done" />
+        app:layout_anchorGravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/action_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="Nothing to Apply"
+            android:textColor="?android:attr/textColorPrimaryInverse"
+            app:backgroundTint="@color/colorAccent"
+            app:icon="@drawable/ic_add"
+            app:iconTint="?android:attr/textColorPrimaryInverse"
+            app:srcCompat="@drawable/ic_done" />
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/expandable_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            app:el_expanded="false">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"
+                app:cardCornerRadius="32dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/app_edit_recycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
+
+    </LinearLayout>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

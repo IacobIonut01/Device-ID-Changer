@@ -1,56 +1,41 @@
 package com.iacob.idchanger;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.iacob.idchanger.app_parser.ApplicationAdapter;
 import com.iacob.idchanger.app_parser.ApplicationModel;
-import com.iacob.idchanger.id_parser.rootCheck;
+import com.iacob.idchanger.utils.ItemRecyclerSpacer;
+import com.iacob.idchanger.utils.rootCheck;
 import com.iacob.idchanger.utils.AppPreferences;
 import com.iacob.idchanger.utils.IDManager;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
@@ -64,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener no_listener;
     static View.OnClickListener listener;
     static View.OnClickListener listenerReboot;
+    static View.OnClickListener listenerList;
     AppPreferences preferences;
 
     @Override
@@ -78,8 +64,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new ItemRecyclerSpacer(0, 0, 0, 256, apps.size() - 1));
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adapter);
-        //Snackbar.make(findViewById(R.id.action_fab), checkForRoot() ? "Root Access Granted" : "Root Access denied", Snackbar.LENGTH_SHORT).show();
         fab = findViewById(R.id.action_fab);
+        ExpandableLayout exp = findViewById(R.id.expandable_layout);
+        CoordinatorLayout.LayoutParams parms = (CoordinatorLayout.LayoutParams) exp.getLayoutParams();
+        parms.width = fab.getWidth();
+        exp.setLayoutParams(parms);
         fab.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -123,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
         listenerReboot = view -> {
             rootCheck.execute("reboot");
         };
+        listenerList = view -> {
+
+        };
         fab.setOnClickListener(no_listener);
     }
 
@@ -137,6 +129,24 @@ public class MainActivity extends AppCompatActivity {
                 fab.setOnClickListener(listener);
             }
         }
+        fab.setIconResource(R.drawable.ic_done);
+        fab.setText("Apply Changes");
+    }
+
+    public static void updateApps(ArrayList<ApplicationModel> models) {
+        for (int i = 0; i < apps.size(); i++) {
+            ApplicationModel app = apps.get(i);
+            for (int k = 0; k < models.size(); k++) {
+                ApplicationModel mod_app = models.get(k);
+                if (app.package_name.equals(mod_app.package_name)) {
+                    apps.set(i, mod_app);
+                }
+            }
+        }
+        recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+        recyclerView.setAdapter(adapter);
+        fab.setOnClickListener(listenerList);
+        Toast.makeText(context, String.format("%s IDs has been changed", models.size()), Toast.LENGTH_SHORT).show();
         fab.setIconResource(R.drawable.ic_done);
         fab.setText("Apply Changes");
     }
