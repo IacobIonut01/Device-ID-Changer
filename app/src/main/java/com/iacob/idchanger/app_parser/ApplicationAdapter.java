@@ -1,6 +1,5 @@
 package com.iacob.idchanger.app_parser;
 
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.ViewHolder> {
 
     public ArrayList<ApplicationModel> applicationModels;
-    private FragmentManager fm;
+    private final FragmentManager fm;
 
     public ApplicationAdapter(ArrayList<ApplicationModel> applicationModels, FragmentManager fm) {
         this.applicationModels = applicationModels;
@@ -42,7 +41,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         holder.appImage.setImageDrawable(app.getIcon());
         holder.appID.setText(app.getID());
         AppPreferences prefs = new AppPreferences(holder.itemView.getContext());
-        if (prefs.getModifiedIDs()!= null)
+        if (prefs.getModifiedIDs() != null)
             holder.appModified.setText(prefs.getModifiedIDs().contains("packagename: " + app.getPackage_name()) ? "Modified ID" : "Original ID");
         else
             holder.appModified.setText("Original ID");

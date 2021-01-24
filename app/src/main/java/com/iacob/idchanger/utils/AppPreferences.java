@@ -2,17 +2,15 @@ package com.iacob.idchanger.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.function.Predicate;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class AppPreferences {
 
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
     public AppPreferences(Context context) {
         prefs = context.getSharedPreferences("app_utils", MODE_PRIVATE);
@@ -31,7 +29,7 @@ public class AppPreferences {
     public void addModifiedID(String packagename) {
         SharedPreferences.Editor editor = prefs.edit();
         ArrayList<String> list = new ArrayList<>();
-        if (getModifiedIDs()!= null) {
+        if (getModifiedIDs() != null) {
             list = getModifiedIDs();
         }
         if (list.contains(packagename)) {

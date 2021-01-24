@@ -2,11 +2,12 @@ package com.iacob.idchanger.utils;
 
 import android.text.InputFilter;
 import android.text.Spanned;
+
 import java.util.regex.Pattern;
 
 public class IDInputFilter implements InputFilter {
 
-    private Pattern pattern;
+    private final Pattern pattern;
 
     public IDInputFilter(String str) {
         this(Pattern.compile(str));

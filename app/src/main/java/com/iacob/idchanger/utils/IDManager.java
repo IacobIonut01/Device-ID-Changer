@@ -1,9 +1,9 @@
 package com.iacob.idchanger.utils;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.iacob.idchanger.app_parser.ApplicationModel;
-import com.iacob.idchanger.id_parser.rootCheck;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -49,7 +49,7 @@ public class IDManager {
         return sb.toString();
     }
 
-    public static boolean writeXMLToSystem(ArrayList<ApplicationModel> apps) {
+    public static String writeXMLToSystem(ArrayList<ApplicationModel> apps) {
         String str = "<?xml version='\\''1.0'\\'' encoding='\\''UTF-8'\\'' standalone='\\''yes'\\'' ?>\n<settings version=\"-1\">\n";
         StringBuilder sb = new StringBuilder();
         sb.append(str);
@@ -60,15 +60,14 @@ public class IDManager {
         StringBuilder sb2 = new StringBuilder();
         sb2.append(str);
         sb2.append("</settings>");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            sb2.append("\n<namespaceHashes />");
+        }
         String sb3 = sb2.toString();
         StringBuilder sb4 = new StringBuilder();
         sb4.append("echo '");
         sb4.append(sb3);
         sb4.append("' > /data/system/users/0/settings_ssaid.xml");
-        //Debug Only
-        //sb4.append("' > /sdcard/settings_ssaid.xml");
-        //Log.d("Debug", sb4.toString());
-        //Log.d("Result", rootCheck.read(sb4.toString()));
-        return true;
+        return String.valueOf(sb4);
     }
 }

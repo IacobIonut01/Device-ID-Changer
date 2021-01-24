@@ -1,23 +1,18 @@
 package com.iacob.idchanger;
 
+import android.content.pm.ApplicationInfo;
+import android.os.Build;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.iacob.idchanger.app_parser.ApplicationAdapter;
 import com.iacob.idchanger.app_parser.ApplicationModel;
 import com.iacob.idchanger.id_parser.rootCheck;
@@ -28,29 +23,18 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
@@ -61,10 +45,29 @@ public class MainActivity extends AppCompatActivity {
     static RecyclerView recyclerView;
     static ApplicationAdapter adapter;
     static ExtendedFloatingActionButton fab;
-    View.OnClickListener no_listener;
     static View.OnClickListener listener;
     static View.OnClickListener listenerReboot;
+    View.OnClickListener no_listener;
     AppPreferences preferences;
+
+    public static void updateApp(ApplicationModel model) {
+        for (int i = 0; i < apps.size(); i++) {
+            ApplicationModel app = apps.get(i);
+            if (app.package_name.equals(model.package_name)) {
+                apps.set(i, model);
+                Toast.makeText(context, String.format("%s's ID has been changed", model.app_name), Toast.LENGTH_SHORT).show();
+                recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
+                recyclerView.setAdapter(adapter);
+                fab.setOnClickListener(listener);
+            }
+        }
+        fab.setIconResource(R.drawable.ic_done);
+        fab.setText("Apply Changes");
+    }
+
+    private static String getValue(String tag, Node element) {
+        return element.getAttributes().getNamedItem(tag).getTextContent();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new ItemRecyclerSpacer(0, 0, 0, 256, apps.size() - 1));
         recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adapter);
-        //Snackbar.make(findViewById(R.id.action_fab), checkForRoot() ? "Root Access Granted" : "Root Access denied", Snackbar.LENGTH_SHORT).show();
         fab = findViewById(R.id.action_fab);
         fab.addTextChangedListener(new TextWatcher() {
             @Override
@@ -113,40 +115,20 @@ public class MainActivity extends AppCompatActivity {
         fab.setText(checkForRoot() ? "Root Access Granted" : "Root Access denied");
         findViewById(R.id.noRootContainer).setVisibility(checkForRoot() ? View.GONE : View.VISIBLE);
         fab.setIconResource(R.drawable.ic_rootguard);
-        no_listener = view -> {};
         listener = view -> {
             fab.setIconResource(R.drawable.ic_randomize);
             fab.setText("Reboot");
             fab.setOnClickListener(listenerReboot);
-            IDManager.writeXMLToSystem(apps);
+            rootCheck.execute(IDManager.writeXMLToSystem(apps));
         };
         listenerReboot = view -> {
             rootCheck.execute("reboot");
         };
-        fab.setOnClickListener(no_listener);
-    }
-
-    public static void updateApp(ApplicationModel model) {
-        for (int i = 0; i < apps.size(); i++) {
-            ApplicationModel app = apps.get(i);
-            if (app.package_name.equals(model.package_name)) {
-                apps.set(i, model);
-                Toast.makeText(context, String.format("%s's ID has been changed", model.app_name), Toast.LENGTH_SHORT).show();
-                recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
-                recyclerView.setAdapter(adapter);
-                fab.setOnClickListener(listener);
-            }
-        }
-        fab.setIconResource(R.drawable.ic_done);
-        fab.setText("Apply Changes");
+        fab.setOnClickListener(null);
     }
 
     public boolean checkForRoot() {
         return rootCheck.IAmRoot();
-    }
-
-    private static String getValue(String tag, Node element) {
-        return element.getAttributes().getNamedItem(tag).getTextContent();
     }
 
     private ArrayList<ApplicationModel> getInstalledApps() {
@@ -155,7 +137,19 @@ public class MainActivity extends AppCompatActivity {
             InputStream is = new ByteArrayInputStream(rootCheck.read("cat /data/system/users/0/settings_ssaid.xml").getBytes());
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(is);
+            BufferedReader r = new BufferedReader(new InputStreamReader(is));
+            Document doc;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                StringBuilder total = new StringBuilder();
+                for (String line; (line = r.readLine()) != null; ) {
+                    total.append(line).append('\n');
+                }
+                String isStripped = total.toString().replace("<namespaceHashes />", "");
+                InputStream stream = new ByteArrayInputStream(isStripped.getBytes(StandardCharsets.UTF_8));
+                doc = dBuilder.parse(stream);
+            } else {
+                doc = dBuilder.parse(is);
+            }
             Element element = doc.getDocumentElement();
             element.normalize();
             NodeList nList = doc.getElementsByTagName("setting");

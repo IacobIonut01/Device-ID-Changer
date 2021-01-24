@@ -42,28 +42,28 @@ public class ApplicationModel {
         return modified;
     }
 
+    public void setModified(boolean modified) {
+        this.modified = modified;
+    }
+
     public Drawable getIcon() {
         return icon;
-    }
-
-    public String getApp_name() {
-        return app_name;
-    }
-
-    public String getPackage_name() {
-        return package_name;
-    }
-
-    public void setApp_name(String app_name) {
-        this.app_name = app_name;
     }
 
     public void setIcon(Drawable icon) {
         this.icon = icon;
     }
 
-    public void setModified(boolean modified) {
-        this.modified = modified;
+    public String getApp_name() {
+        return app_name;
+    }
+
+    public void setApp_name(String app_name) {
+        this.app_name = app_name;
+    }
+
+    public String getPackage_name() {
+        return package_name;
     }
 
     public void setPackage_name(String package_name) {
@@ -93,12 +93,12 @@ public class ApplicationModel {
             return defaultSysSet;
         }
 
-        public String getId() {
-            return id;
-        }
-
         public void setDefaultSysSet(String defaultSysSet) {
             this.defaultSysSet = defaultSysSet;
+        }
+
+        public String getId() {
+            return id;
         }
 
         public void setId(String id) {

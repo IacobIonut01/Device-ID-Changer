@@ -1,6 +1,5 @@
 package com.iacob.idchanger.fragments;
 
-import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -21,13 +20,11 @@ import com.iacob.idchanger.utils.AppPreferences;
 import com.iacob.idchanger.utils.IDInputFilter;
 import com.iacob.idchanger.utils.IDManager;
 
-import java.util.Objects;
-
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 
 public class EditFragment extends RoundedSheetFragment {
 
-    private ApplicationModel applicationInfo;
+    private final ApplicationModel applicationInfo;
 
     public EditFragment(ApplicationModel applicationInfo) {
         this.applicationInfo = applicationInfo;
@@ -69,7 +66,7 @@ public class EditFragment extends RoundedSheetFragment {
             applicationInfo.setID(currID.getText().toString());
             applicationInfo.setDefID(defID.getText().toString());
             prefs.addModifiedID(applicationInfo.package_name);
-            applicationInfo.modified=true;
+            applicationInfo.modified = true;
             MainActivity.updateApp(applicationInfo);
             dismiss();
         });
